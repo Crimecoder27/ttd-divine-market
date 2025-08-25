@@ -15,13 +15,13 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div 
-            className="flex items-center cursor-pointer" 
+            className="flex items-center cursor-pointer group" 
             onClick={() => navigate("/")}
           >
-            <div className="hero-gradient text-primary-foreground px-3 py-1 rounded-lg font-bold text-lg">
+            <div className="hero-gradient text-primary-foreground px-3 py-1 rounded-lg font-bold text-lg group-hover:scale-105 transition-bounce">
               TTD
             </div>
-            <span className="ml-2 text-xl font-bold text-foreground">
+            <span className="ml-2 text-xl font-bold text-foreground group-hover:text-primary transition-smooth">
               Vendor Marketplace
             </span>
           </div>
@@ -30,27 +30,31 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             <button 
               onClick={() => navigate("/")}
-              className="text-foreground hover:text-primary transition-smooth"
+              className="text-foreground hover:text-primary transition-smooth relative group"
             >
               Home
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </button>
             <button 
               onClick={() => navigate("/shop")}
-              className="text-foreground hover:text-primary transition-smooth"
+              className="text-foreground hover:text-primary transition-smooth relative group"
             >
               Shop
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </button>
             <button 
               onClick={() => navigate("/categories")}
-              className="text-foreground hover:text-primary transition-smooth"
+              className="text-foreground hover:text-primary transition-smooth relative group"
             >
               Categories
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </button>
             <button 
               onClick={() => navigate("/vendors")}
-              className="text-foreground hover:text-primary transition-smooth"
+              className="text-foreground hover:text-primary transition-smooth relative group"
             >
               Vendors
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </button>
           </div>
 
@@ -70,11 +74,11 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate("/cart")}
-              className="relative"
+              className="relative hover-float group"
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-5 w-5 group-hover:animate-bounce" />
               {cartCount > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground text-xs">
+                <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground text-xs pulse-glow">
                   {cartCount}
                 </Badge>
               )}
@@ -84,13 +88,14 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate("/login")}
+              className="hover-float group"
             >
-              <User className="h-5 w-5" />
+              <User className="h-5 w-5 group-hover:scale-110 transition-bounce" />
             </Button>
 
             <Button 
               onClick={() => navigate("/vendor/register")}
-              className="hidden sm:flex"
+              className="hidden sm:flex hover-float"
             >
               Become a Vendor
             </Button>
@@ -99,7 +104,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden hover-float"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -109,33 +114,33 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-border py-4">
+          <div className="md:hidden border-t border-border py-4 animate-slide-down">
             <div className="flex flex-col space-y-4">
               <button 
                 onClick={() => { navigate("/"); setIsMenuOpen(false); }}
-                className="text-left text-foreground hover:text-primary transition-smooth"
+                className="text-left text-foreground hover:text-primary transition-smooth hover:translate-x-2"
               >
                 Home
               </button>
               <button 
                 onClick={() => { navigate("/shop"); setIsMenuOpen(false); }}
-                className="text-left text-foreground hover:text-primary transition-smooth"
+                className="text-left text-foreground hover:text-primary transition-smooth hover:translate-x-2"
               >
                 Shop
               </button>
               <button 
                 onClick={() => { navigate("/categories"); setIsMenuOpen(false); }}
-                className="text-left text-foreground hover:text-primary transition-smooth"
+                className="text-left text-foreground hover:text-primary transition-smooth hover:translate-x-2"
               >
                 Categories
               </button>
               <button 
                 onClick={() => { navigate("/vendors"); setIsMenuOpen(false); }}
-                className="text-left text-foreground hover:text-primary transition-smooth"
+                className="text-left text-foreground hover:text-primary transition-smooth hover:translate-x-2"
               >
                 Vendors
               </button>
-              <div className="flex items-center bg-muted rounded-lg px-3 py-2">
+              <div className="flex items-center bg-muted rounded-lg px-3 py-2 hover:bg-muted/80 transition-smooth">
                 <Search className="h-4 w-4 text-muted-foreground mr-2" />
                 <input
                   type="text"
@@ -145,7 +150,7 @@ const Navbar = () => {
               </div>
               <Button 
                 onClick={() => { navigate("/vendor/register"); setIsMenuOpen(false); }}
-                className="w-full"
+                className="w-full hover-float"
               >
                 Become a Vendor
               </Button>

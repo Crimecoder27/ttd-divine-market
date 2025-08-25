@@ -62,12 +62,12 @@ const ProductCard = ({
   };
 
   return (
-    <Card className="group hover:shadow-elegant transition-smooth border border-border overflow-hidden">
+    <Card className="group hover:shadow-elegant transition-smooth border border-border overflow-hidden hover-float">
       <div className="relative overflow-hidden">
         <img
           src={image}
           alt={name}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-smooth"
+          className="w-full h-48 object-cover group-hover:scale-110 transition-all duration-500"
         />
         
         {/* Badges */}
@@ -97,17 +97,17 @@ const ProductCard = ({
         </Button>
 
         {/* Quick Add to Cart */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-smooth flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
           <Button
             onClick={handleAddToCart}
             disabled={!inStock || isAddingToCart}
-            className="bg-primary hover:bg-primary-hover text-primary-foreground"
+            className="bg-primary hover:bg-primary-hover text-primary-foreground transform scale-90 group-hover:scale-100 transition-all duration-300 hover-float"
           >
             {isAddingToCart ? (
-              "Adding..."
+              <span className="animate-pulse">Adding...</span>
             ) : (
               <>
-                <ShoppingCart className="h-4 w-4 mr-2" />
+                <ShoppingCart className="h-4 w-4 mr-2 group-hover:animate-bounce" />
                 Quick Add
               </>
             )}

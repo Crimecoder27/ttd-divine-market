@@ -78,32 +78,32 @@ const Index = () => {
           <img 
             src={heroImage} 
             alt="TTD Marketplace" 
-            className="w-full h-full object-cover transition-all duration-1000"
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center text-white">
-            <Badge className="mb-6 bg-primary text-primary-foreground animate-fade-in">
+            <Badge className="mb-6 bg-primary text-primary-foreground">
               TTD Authentic Products
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 animate-slide-up stagger-1">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
               Divine Shopping
               <br />
               <span className="hero-gradient bg-clip-text text-transparent">
                 Sacred Experience
               </span>
             </h1>
-            <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-slide-up stagger-2">
+            <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
               Connect with authentic TTD vendors and discover sacred products, 
               blessed prasadam, and spiritual treasures from Tirumala
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-bounce-in stagger-3">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
                 onClick={() => navigate("/shop")}
-                className="bg-primary hover:bg-primary-hover text-primary-foreground shadow-glow hover-float pulse-glow"
+                className="bg-primary hover:bg-primary-hover text-primary-foreground shadow-glow"
               >
                 <ShoppingBag className="mr-2 h-5 w-5" />
                 Shop Now
@@ -113,7 +113,7 @@ const Index = () => {
                 size="lg" 
                 variant="outline" 
                 onClick={() => navigate("/vendor/register")}
-                className="bg-white/10 border-white text-white hover:bg-white hover:text-foreground hover-float"
+                className="bg-white/10 border-white text-white hover:bg-white hover:text-foreground"
               >
                 Become a Vendor
               </Button>
@@ -127,8 +127,8 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center animate-bounce-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary rounded-lg mb-4 hover:scale-110 transition-bounce pulse-glow">
+              <div key={index} className="text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary rounded-lg mb-4">
                   <stat.icon className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <div className="text-2xl font-bold text-foreground mb-1">{stat.value}</div>
@@ -143,10 +143,10 @@ const Index = () => {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4 animate-fade-in">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Shop by Category
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto animate-slide-up stagger-1">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Explore our diverse collection of authentic TTD products across different categories
             </p>
           </div>
@@ -155,12 +155,11 @@ const Index = () => {
             {categories.map((category, index) => (
               <Card 
                 key={index} 
-                className="group cursor-pointer hover:shadow-elegant transition-smooth border border-border hover-glow animate-bounce-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="group cursor-pointer hover:shadow-elegant transition-smooth border border-border"
                 onClick={() => navigate("/shop")}
               >
                 <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-bounce">{category.icon}</div>
+                  <div className="text-4xl mb-4">{category.icon}</div>
                   <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-smooth">
                     {category.name}
                   </h3>
@@ -177,17 +176,17 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-foreground mb-4 animate-fade-in">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 Featured Products
               </h2>
-              <p className="text-muted-foreground animate-slide-up stagger-1">
+              <p className="text-muted-foreground">
                 Handpicked authentic products from our trusted vendors
               </p>
             </div>
             <Button 
               variant="outline" 
               onClick={() => navigate("/shop")}
-              className="hidden sm:flex hover-float animate-fade-in stagger-2"
+              className="hidden sm:flex"
             >
               View All
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -195,15 +194,13 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProducts.map((product, index) => (
-              <div key={product.id} className="animate-slide-up" style={{ animationDelay: `${index * 0.15}s` }}>
-                <ProductCard {...product} />
-              </div>
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} {...product} />
             ))}
           </div>
           
           <div className="text-center mt-8 sm:hidden">
-            <Button onClick={() => navigate("/shop")} className="hover-float animate-fade-in stagger-4">
+            <Button onClick={() => navigate("/shop")}>
               View All Products
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -215,17 +212,17 @@ const Index = () => {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4 animate-fade-in">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Why Choose TTD Marketplace?
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto animate-slide-up stagger-1">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Experience the divine through our carefully curated marketplace
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group animate-bounce-in stagger-1">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full mb-6 group-hover:shadow-glow transition-smooth hover:scale-110 transition-bounce">
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full mb-6 group-hover:shadow-glow transition-smooth">
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">TTD Authentic</h3>
@@ -234,8 +231,8 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="text-center group animate-bounce-in stagger-2">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-secondary to-accent rounded-full mb-6 group-hover:shadow-glow transition-smooth hover:scale-110 transition-bounce">
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-secondary to-accent rounded-full mb-6 group-hover:shadow-glow transition-smooth">
                 <Heart className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Made with Devotion</h3>
@@ -244,8 +241,8 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="text-center group animate-bounce-in stagger-3">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-accent to-primary rounded-full mb-6 group-hover:shadow-glow transition-smooth hover:scale-110 transition-bounce">
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-accent to-primary rounded-full mb-6 group-hover:shadow-glow transition-smooth">
                 <Award className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Trusted Community</h3>
@@ -260,18 +257,18 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-16 hero-gradient">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4 animate-fade-in">
+          <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Start Your Spiritual Journey?
           </h2>
-          <p className="text-xl text-white/90 mb-8 animate-slide-up stagger-1">
+          <p className="text-xl text-white/90 mb-8">
             Join our marketplace and discover authentic spiritual products from trusted TTD vendors
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-bounce-in stagger-2">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
               variant="secondary"
               onClick={() => navigate("/shop")}
-              className="bg-white text-primary hover:bg-white/90 hover-float"
+              className="bg-white text-primary hover:bg-white/90"
             >
               <ShoppingBag className="mr-2 h-5 w-5" />
               Start Shopping
@@ -280,7 +277,7 @@ const Index = () => {
               size="lg" 
               variant="outline"
               onClick={() => navigate("/vendor/register")}
-              className="border-white text-white hover:bg-white hover:text-primary hover-float"
+              className="border-white text-white hover:bg-white hover:text-primary"
             >
               Become a Vendor
             </Button>

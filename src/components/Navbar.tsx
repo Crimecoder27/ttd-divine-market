@@ -1,13 +1,43 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Search, User, Menu, X } from "lucide-react";
+import { 
+  ShoppingCart, 
+  Search, 
+  User, 
+  Menu, 
+  X, 
+  Heart, 
+  Bell, 
+  LogOut 
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartCount] = useState(3); // Sample cart count
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+      navigate("/");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <nav className="bg-background border-b border-border shadow-card sticky top-0 z-50">
@@ -70,6 +100,17 @@ const Navbar = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="icon" className="relative hover-float">
+              <Heart className="h-5 w-5" />
+            </Button>
+            
+            <Button variant="ghost" size="icon" className="relative hover-float">
+              <Bell className="h-5 w-5" />
+              <Badge className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs px-1 min-w-5 h-5">
+                3
+              </Badge>
+            </Button>
+
             <Button
               variant="ghost"
               size="icon"
@@ -84,14 +125,32 @@ const Navbar = () => {
               )}
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/login")}
-              className="hover-float group"
-            >
-              <User className="h-5 w-5 group-hover:scale-110 transition-bounce" />
-            </Button>
+            {user ? (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-muted-foreground hidden sm:inline">
+                  Welcome back!
+                </span>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleSignOut}
+                  className="hover-float"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate("/login")}
+                className="hover-float"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Login
+              </Button>
+            )}
 
             <Button 
               onClick={() => navigate("/vendor/register")}

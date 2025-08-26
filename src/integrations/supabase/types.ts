@@ -14,6 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
+      product_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          is_primary: boolean | null
+          product_id: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_primary?: boolean | null
+          product_id: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_primary?: boolean | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          dimensions: Json | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          min_order_quantity: number | null
+          name: string
+          original_price: number | null
+          price: number
+          sku: string | null
+          specifications: Json | null
+          stock_quantity: number | null
+          tags: string[] | null
+          updated_at: string
+          vendor_id: string
+          weight: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          dimensions?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          min_order_quantity?: number | null
+          name: string
+          original_price?: number | null
+          price: number
+          sku?: string | null
+          specifications?: Json | null
+          stock_quantity?: number | null
+          tags?: string[] | null
+          updated_at?: string
+          vendor_id: string
+          weight?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          dimensions?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          min_order_quantity?: number | null
+          name?: string
+          original_price?: number | null
+          price?: number
+          sku?: string | null
+          specifications?: Json | null
+          stock_quantity?: number | null
+          tags?: string[] | null
+          updated_at?: string
+          vendor_id?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

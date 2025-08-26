@@ -44,6 +44,137 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_type: string
+          image_url: string
+          vendor_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_type: string
+          image_url: string
+          vendor_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_type?: string
+          image_url?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_images_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendors: {
+        Row: {
+          area: string | null
+          business_hours: Json | null
+          business_license: string | null
+          business_type: string
+          city: string
+          country: string
+          created_at: string
+          delivery_available: boolean | null
+          delivery_radius: number | null
+          description: string | null
+          email: string
+          employee_count: number | null
+          established_year: number | null
+          gst_number: string | null
+          id: string
+          is_verified: boolean | null
+          landmark: string | null
+          latitude: number | null
+          longitude: number | null
+          phone: string
+          postal_code: string
+          shop_name: string
+          state: string
+          street_address: string
+          updated_at: string
+          user_id: string
+          verification_document_url: string | null
+          website: string | null
+        }
+        Insert: {
+          area?: string | null
+          business_hours?: Json | null
+          business_license?: string | null
+          business_type: string
+          city: string
+          country?: string
+          created_at?: string
+          delivery_available?: boolean | null
+          delivery_radius?: number | null
+          description?: string | null
+          email: string
+          employee_count?: number | null
+          established_year?: number | null
+          gst_number?: string | null
+          id?: string
+          is_verified?: boolean | null
+          landmark?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          phone: string
+          postal_code: string
+          shop_name: string
+          state: string
+          street_address: string
+          updated_at?: string
+          user_id: string
+          verification_document_url?: string | null
+          website?: string | null
+        }
+        Update: {
+          area?: string | null
+          business_hours?: Json | null
+          business_license?: string | null
+          business_type?: string
+          city?: string
+          country?: string
+          created_at?: string
+          delivery_available?: boolean | null
+          delivery_radius?: number | null
+          description?: string | null
+          email?: string
+          employee_count?: number | null
+          established_year?: number | null
+          gst_number?: string | null
+          id?: string
+          is_verified?: boolean | null
+          landmark?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          phone?: string
+          postal_code?: string
+          shop_name?: string
+          state?: string
+          street_address?: string
+          updated_at?: string
+          user_id?: string
+          verification_document_url?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

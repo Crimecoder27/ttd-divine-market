@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -100,6 +101,8 @@ const Navbar = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
             <Button variant="ghost" size="icon" className="relative hover-float">
               <Heart className="h-5 w-5" />
             </Button>

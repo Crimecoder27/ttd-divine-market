@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { LogIn, UserPlus, Mail, Lock, User as UserIcon, Phone } from "lucide-react";
+import { LogIn, UserPlus, Mail, Lock, User as UserIcon, Phone, ArrowLeft } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import type { User, Session } from '@supabase/supabase-js';
 
 const Auth = () => {
@@ -15,7 +16,10 @@ const Auth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [phoneVerification, setPhoneVerification] = useState(false);
+  const [emailVerification, setEmailVerification] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [authMode, setAuthMode] = useState<'password' | 'otp'>('password');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -212,13 +216,85 @@ const Auth = () => {
     }
   };
 
-  const handlePhoneVerify = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailOTPRequest = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
-    const token = formData.get("token") as string;
+    const email = formData.get("email") as string;
+    setEmailAddress(email);
 
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Failed to send email",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        setEmailVerification(true);
+        toast({
+          title: "Check your email",
+          description: "We've sent you a verification code.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailOTPVerify = async (token: string) => {
+    if (token.length !== 6) return;
+    
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: emailAddress,
+        token,
+        type: 'email'
+      });
+
+      if (error) {
+        toast({
+          title: "Verification failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Welcome!",
+          description: "You have been signed in successfully.",
+        });
+        setEmailVerification(false);
+      }
+    } catch (error) {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePhoneVerify = async (token: string) => {
+    if (token.length !== 6) return;
+    
+    setIsLoading(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
         phone: phoneNumber,
@@ -276,7 +352,7 @@ const Auth = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {!phoneVerification ? (
+                {!phoneVerification && !emailVerification ? (
                   <>
                     {/* Google Sign In */}
                     <Button 
@@ -301,46 +377,96 @@ const Auth = () => {
                       </div>
                     </div>
 
-                    {/* Email Form */}
-                    <form onSubmit={handleSignIn} className="space-y-4 mb-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="signin-email">Email</Label>
-                        <div className="relative">
-                          <Mail className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                          <Input
-                            id="signin-email"
-                            name="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            className="pl-10"
-                            required
-                            disabled={isLoading}
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="signin-password">Password</Label>
-                        <div className="relative">
-                          <Lock className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                          <Input
-                            id="signin-password"
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            className="pl-10"
-                            required
-                            disabled={isLoading}
-                          />
-                        </div>
-                      </div>
-                      <Button 
-                        type="submit" 
-                        className="w-full" 
-                        disabled={isLoading}
+                    {/* Auth Mode Toggle */}
+                    <div className="flex gap-2 mb-4">
+                      <Button
+                        type="button"
+                        variant={authMode === 'password' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setAuthMode('password')}
+                        className="flex-1"
                       >
-                        {isLoading ? "Signing in..." : "Sign In"}
+                        Password
                       </Button>
-                    </form>
+                      <Button
+                        type="button"
+                        variant={authMode === 'otp' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setAuthMode('otp')}
+                        className="flex-1"
+                      >
+                        OTP
+                      </Button>
+                    </div>
+
+                    {authMode === 'password' ? (
+                      /* Email/Password Form */
+                      <form onSubmit={handleSignIn} className="space-y-4 mb-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="signin-email">Email</Label>
+                          <div className="relative">
+                            <Mail className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                              id="signin-email"
+                              name="email"
+                              type="email"
+                              placeholder="Enter your email"
+                              className="pl-10"
+                              required
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="signin-password">Password</Label>
+                          <div className="relative">
+                            <Lock className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                              id="signin-password"
+                              name="password"
+                              type="password"
+                              placeholder="Enter your password"
+                              className="pl-10"
+                              required
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </div>
+                        <Button 
+                          type="submit" 
+                          className="w-full" 
+                          disabled={isLoading}
+                        >
+                          {isLoading ? "Signing in..." : "Sign In"}
+                        </Button>
+                      </form>
+                    ) : (
+                      /* Email OTP Form */
+                      <form onSubmit={handleEmailOTPRequest} className="space-y-4 mb-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="otp-email">Email</Label>
+                          <div className="relative">
+                            <Mail className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                              id="otp-email"
+                              name="email"
+                              type="email"
+                              placeholder="Enter your email"
+                              className="pl-10"
+                              required
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </div>
+                        <Button 
+                          type="submit" 
+                          className="w-full" 
+                          disabled={isLoading}
+                        >
+                          {isLoading ? "Sending OTP..." : "Send Email OTP"}
+                        </Button>
+                      </form>
+                    )}
 
                     {/* Phone Auth */}
                     <div className="relative mb-4">
@@ -380,42 +506,72 @@ const Auth = () => {
                       </Button>
                     </form>
                   </>
-                ) : (
-                  /* Phone Verification */
-                  <form onSubmit={handlePhoneVerify} className="space-y-4">
+                ) : phoneVerification ? (
+                  /* Phone OTP Verification */
+                  <div className="space-y-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="mb-2 p-0 h-auto"
+                      onClick={() => setPhoneVerification(false)}
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Back
+                    </Button>
                     <div className="text-center mb-4">
                       <p className="text-sm text-muted-foreground">
                         We sent a verification code to {phoneNumber}
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="verification-token">Verification Code</Label>
-                      <Input
-                        id="verification-token"
-                        name="token"
-                        placeholder="Enter 6-digit code"
-                        maxLength={6}
-                        required
-                        disabled={isLoading}
-                      />
+                      <Label>Verification Code</Label>
+                      <div className="flex justify-center">
+                        <InputOTP maxLength={6} onChange={handlePhoneVerify}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
                     </div>
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={isLoading}
-                    >
-                      {isLoading ? "Verifying..." : "Verify Code"}
-                    </Button>
-                    <Button 
+                  </div>
+                ) : (
+                  /* Email OTP Verification */
+                  <div className="space-y-4">
+                    <Button
                       type="button"
                       variant="ghost"
-                      className="w-full" 
-                      onClick={() => setPhoneVerification(false)}
-                      disabled={isLoading}
+                      className="mb-2 p-0 h-auto"
+                      onClick={() => setEmailVerification(false)}
                     >
-                      Back to Sign In
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Back
                     </Button>
-                  </form>
+                    <div className="text-center mb-4">
+                      <p className="text-sm text-muted-foreground">
+                        We sent a verification code to {emailAddress}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Verification Code</Label>
+                      <div className="flex justify-center">
+                        <InputOTP maxLength={6} onChange={handleEmailOTPVerify}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
+                    </div>
+                  </div>
                 )}
               </CardContent>
             </Card>
